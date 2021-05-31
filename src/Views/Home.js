@@ -1,39 +1,23 @@
 
-import axios from "axios";
-import { useEffect, useState } from "react";
+import ErrorMessage from "../Components/ErrorMessage";
 import Loader from "../Components/Loader";
 import ProductCard from "../Components/ProductCard";
+import { useAxiosGet } from "../Hooks/HTTPRequest";
 
 function Home() {
-  const url = `https://60b11d181f26610017fffe7b.mockapi.io/api/v1/products?page=1&limit=10`;
-  const [products, setProducts] = useState(
-    {loading: false,
-        data: null,
-       error: false,
-    });
+  // Create your own Mock API: https://mockapi.io
+  const url = `https://60b11d181f26610017fffe7bX.mockapi.io/api/v1/products?page=1&limit=10`;
 
+  let products = useAxiosGet(url)
+  
   let content = null;
-  useEffect(() => {
-    setProducts({loading: true,
-                   data: null,
-                  error: false});
-    axios.get(url).then(response => {
-      setProducts({loading: true,
-                     data: response.data,
-                    error: false});
-    })
-    .catch(() => {
-      setProducts({loading: false,
-                     data: null,
-                    error: true});
-    })
-  }, [url]
-  ) 
 
   if (products.error) {
-    content = <p>
-      There was an error. Please refresh or try again later.
-    </p>
+    content = <div>
+      <ErrorMessage clColor="blue" message="If you see this error: Please remember to create your's own mock API"/>
+
+      <ErrorMessage clColor="red" message="There was an error. Please refresh or try again later."/>
+    </div>
   }
     
   if (products.loading) {
